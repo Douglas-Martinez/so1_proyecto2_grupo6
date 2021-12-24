@@ -61,71 +61,109 @@ export class OneDose extends Component {
   }
 
   ordenarPorDepartamento = (data) => {
-    try {
-      //console.log(data.length);
-      let resultByDept = [];
+    const arrData = data;
+    let departamentos = [];
+    let arrFinal = [];
+    //console.log(arrData);
+    arrData.forEach(element => {
+      if(departamentos.indexOf(element.location) === -1) {
+        departamentos.push(element.location);
+      }
+    });
+    //console.log(departamentos);
+    departamentos.forEach(element => {
+      let nuevo = {
+        x: element,
+        y: departamentos.filter((obj) => obj === element).length
+      }
+      arrFinal.push(nuevo);
+    });
+    //console.log(arrFinal);
+    arrFinal.forEach(element => {
+      element.y = (element.y * 100) / data.length;
+      element.x = element.x + ": " + element.y.toFixed(2) + "%";
+    });
 
-      data.forEach((element) => {
-        if (!this[element.location]) {
-          this[element.location] = {
-            x: element.location,
-            y: 0,
-          };
-          resultByDept.push(this[element.location]);
-        }
-        this[element.location].y++;
-      }, Object.create(null));
-      //console.log(resultByDept.length);
-      resultByDept.forEach((element) => {
-        element.y = (element.y * 100) / data.length;
-        element.x = element.x + ": " + element.y.toFixed(2) + "%";
-      });
-      //console.log(resultByDept.length);
-      return resultByDept;
-    } catch (err) {
-      console.error(err);
-      return [];
-    }
+    return arrFinal;
+
   };
 
   ordenarPorVacuna = (data) => {
-    try {
-      //console.log(data.length);
-      let resultByVac = [];
+    const arrData = data;
+    let departamentos = [];
+    let arrFinal = [];
+    //console.log(arrData);
+    arrData.forEach(element => {
+      if(departamentos.indexOf(element.vaccine_type) === -1) {
+        departamentos.push(element.vaccine_type);
+      }
+    });
+    //console.log(departamentos);
+    departamentos.forEach(element => {
+      let nuevo = {
+        x: element,
+        y: departamentos.filter((obj) => obj === element).length
+      }
+      arrFinal.push(nuevo);
+    });
+    //console.log(arrFinal);
+    arrFinal.forEach(element => {
+      element.y = (element.y * 100) / data.length;
+      element.x = element.x + ": " + element.y.toFixed(2) + "%";
+    });
 
-      data.forEach((element) => {
-        if (!this[element.vaccine_type]) {
-          this[element.vaccine_type] = {
-            x: element.vaccine_type,
-            y: 0,
-          };
-          resultByVac.push(this[element.vaccine_type]);
-        }
-        this[element.vaccine_type].y++;
-      }, Object.create(null));
-      //console.log(resultByVac.length);
-      resultByVac.forEach((element) => {
-        element.y = (element.y * 100) / data.length;
-        element.x = element.x + ": " + element.y.toFixed(2) + "%";
-      });
-      //console.log(resultByVac.length);
-      return resultByVac;
-    } catch (err) {
-      console.error(err);
-      return [];
-    }
+    return arrFinal;
   };
+
+  ordenarPorEdad = (data) => {
+    const arrData = data;
+    let edades = [
+      {
+        x: "menores",
+        y: arrData.filter((obj) => obj.age < 18).length
+      },
+      {
+        x: "<25",
+        y: arrData.filter((obj) => obj.age >= 18 && obj.age < 25).length
+      },
+      {
+        x: "<35",
+        y: arrData.filter((obj) => obj.age >= 25 && obj.age < 35).length
+      },
+      {
+        x: "<45",
+        y: arrData.filter((obj) => obj.age >= 18 && obj.age < 45).length
+      },
+      {
+        x: "<55",
+        y: arrData.filter((obj) => obj.age >= 18 && obj.age < 55).length
+      },
+      {
+        x: "mayores",
+        y: arrData.filter((obj) => obj.age >= 55).length
+      }
+    ]
+
+    edades.forEach(element => {
+      element.y = (element.y * 100) / data.length;
+      element.x = element.x + ": " + element.y.toFixed(2) + "%";
+    });
+
+    return edades;
+  }
 
   fetchData = async () => {
     try {
       let data = await api.getOneDose();
 
       data = data.data;
-      console.log(data);
+      //console.log(typeof(data.length));
       let result = this.ordenarPorDepartamento(data);
+
       let result2 = this.ordenarPorVacuna(data);
-      let result3 = [];
-      console.log([result, result2, result3]);
+
+      let result3 = this.ordenarPorEdad(data);
+      //console.log([result, result2, result3]);
 
 
       if (this.state.vac === true) {
