@@ -117,11 +117,33 @@ func publisherHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func cleanData() {
+	rdb := redis.NewClient(&redis.Options {
+		Addr: os.Getenv("REDIS_ADDRESS") + ":6379",
+		DB: 0,
+	})
+
+	rdb.Set(ctx, "edad1_10", 0, 0)
+	rdb.Set(ctx, "edad11_20", 0, 0)
+	rdb.Set(ctx, "edad21_30", 0, 0)
+	rdb.Set(ctx, "edad31_40", 0, 0)
+	rdb.Set(ctx, "edad41_50", 0, 0)
+	rdb.Set(ctx, "edad51_60", 0, 0)
+	rdb.Set(ctx, "edad61_70", 0, 0)
+	rdb.Set(ctx, "edad71_80", 0, 0)
+	rdb.Set(ctx, "edad81_90", 0, 0)
+	rdb.Set(ctx, "edad91_100", 0, 0)
+
+	rdb.Del(ctx, "lNombres")
+}
+
 func main() {
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
+
+	cleanData()
 
 	router := mux.NewRouter().StrictSlash(true)
 	enableCORS(router)
