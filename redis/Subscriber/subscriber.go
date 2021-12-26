@@ -8,7 +8,10 @@ import (
 	"encoding/json"
 
 	"github.com/joho/godotenv"
-	"github.com/go-redis/redis/v8"	
+	"github.com/go-redis/redis/v8"
+	"go.mongodb.org/mongo-driver/mongo"
+    "go.mongodb.org/mongo-driver/mongo/options"
+	
 )
 
 type Register struct {
@@ -37,7 +40,26 @@ func main() {
 	sub := rdb.Subscribe(ctx, "Registros")
 	fmt.Println("Suscrito al canal de Redis")
 
-		for {
+	//Conexion Mongo
+	cOptions := options.Client().ApplyURI(fmt.Sprintf("mongodb://"+os.Getenv("MONGO_ADDRESS")+":27017"))
+	mongoClient, err := mongo.Connect(ctx, cOptions)
+	if err != nil {
+		fmt.Println("Error creando cliente de Mongo")
+		log.Fatal(err)
+	}
+	err = mongoClient.Ping(ctx, nil)
+	if err != nil {
+		fmt.Println("Error conectando al servidor")
+		log.Fatal(err)
+	}
+	fmt.Println("Conectado a MongoDB")
+	myMongoDB := mongoClient.Database("proyecto2")
+	collection := myMongoDB.Collection("Registros")
+	collection.Drop(context.TODO())
+	collection = myMongoDB.Collection("Registros")
+
+	
+	for {
 		// Subscriber de Redis
 		msg, err := sub.ReceiveMessage(ctx)
 		if err != nil {
@@ -52,6 +74,14 @@ func main() {
 			}
 			fmt.Print("Mensaje recibido del canal '" + msg.Channel + "': ")
 			fmt.Println(nuevo.Name + " - " + nuevo.Location)
+
+			//Insertar MongoDB
+			_, err := collection.InsertOne(context.TODO(), nuevo)
+			if err != nil {
+				fmt.Println("Error Insertando datos en MongoDB")
+				log.Fatal(err)
+			}
+			fmt.Println("\tRegistro insertado en MongoDB")
 		}
 	}
 }
