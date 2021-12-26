@@ -18,6 +18,11 @@ import (
 
 var ctx = context.Background()
 
+var rdb = redis.NewClient(&redis.Options {
+	Addr: os.Getenv("REDIS_ADDRESS") + ":6379",
+	DB: 0,
+})
+
 type Register struct {
 	Name 			string 	`json:Name`
 	Location 		string 	`json:Location`
@@ -87,11 +92,6 @@ func publisherHandler(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
-	rdb := redis.NewClient(&redis.Options {
-		Addr: os.Getenv("REDIS_ADDRESS") + ":6379",
-		DB: 0,
-	})
-	
 	if nuevo.Age != 0 && nuevo.Name != "" {
 		// Contador de edades
 		_, err := rdb.Incr(ctx, keyEdad(nuevo.Age)).Result()
@@ -110,7 +110,7 @@ func publisherHandler(w http.ResponseWriter, r *http.Request) {
 		rdb.LTrim(ctx, "lNombres", 0, 4)
 
 		// Publicar Mensaje
-		rdb.Publish(ctx, "Register", string(body))
+		rdb.Publish(ctx, "Registros", string(body))
 		fmt.Println("Registro Publicado")
 	} else {
 		fmt.Println("Algunos datos incompletos")
@@ -118,11 +118,6 @@ func publisherHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func cleanData() {
-	rdb := redis.NewClient(&redis.Options {
-		Addr: os.Getenv("REDIS_ADDRESS") + ":6379",
-		DB: 0,
-	})
-
 	rdb.Set(ctx, "edad1_10", 0, 0)
 	rdb.Set(ctx, "edad11_20", 0, 0)
 	rdb.Set(ctx, "edad21_30", 0, 0)
