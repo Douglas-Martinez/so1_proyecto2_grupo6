@@ -7,11 +7,10 @@ import (
 	"os"
 	"encoding/json"
 
-	"github.com/joho/godotenv"
+	//"github.com/joho/godotenv"
 	"github.com/go-redis/redis/v8"
 	"go.mongodb.org/mongo-driver/mongo"
     "go.mongodb.org/mongo-driver/mongo/options"
-	
 )
 
 type Register struct {
@@ -26,10 +25,12 @@ var ctx = context.Background()
 
 func main() {
 	// Carga de archivo .env
+	/*
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
+	*/
 	
 	// Conexion Redis
 	rdb := redis.NewClient(&redis.Options {

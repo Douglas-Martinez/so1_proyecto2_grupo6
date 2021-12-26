@@ -12,7 +12,7 @@ import (
 	
 
 	"github.com/gorilla/mux"
-	"github.com/joho/godotenv"
+	//"github.com/joho/godotenv"
 	"github.com/go-redis/redis/v8"
 )
 
@@ -133,10 +133,12 @@ func cleanData() {
 }
 
 func main() {
+	/*
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
+	*/
 
 	cleanData()
 
