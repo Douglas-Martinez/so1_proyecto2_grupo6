@@ -24,11 +24,11 @@ var rdb = redis.NewClient(&redis.Options {
 })
 
 type Register struct {
-	Name 			string 	`json:Name`
-	Location 		string 	`json:Location`
-	Age 			int		`json:Age`
-	Vaccine_type 	string	`json:Vaccine_type`
-	N_dose 			int		`json:N_dose`
+	Name 			string 	`json:name`
+	Location 		string 	`json:location`
+	Age 			int		`json:age`
+	Vaccine_type 	string	`json:vaccine_type`
+	N_dose 			int		`json:n_dose`
 }
 
 func middlewareCors(next http.Handler) http.Handler {
