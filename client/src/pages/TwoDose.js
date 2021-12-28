@@ -155,7 +155,7 @@ export class OneDose extends Component {
 
       totalData = totalData.data.length;
 
-      let data = await api.getOneDose();
+      let data = await api.getTwoDose();
 
       data = data.data;
       //console.log(typeof(data.length));
@@ -223,7 +223,7 @@ export class OneDose extends Component {
     }
     return (
       <div className="container">
-        <h1>Estadisticas con usuarios de una dosis</h1>
+        <h1>Estadisticas con usuarios de dosis completa</h1>
         <hr />
         <div
           className="btn-group"

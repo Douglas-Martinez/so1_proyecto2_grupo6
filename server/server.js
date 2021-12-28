@@ -32,6 +32,14 @@ MongoClient.connect(connString, {
             })
             .catch(error => console.error(error))
         });
+
+        app.get('/two_dose', (req, res) => {
+            db.collection('registros').find({n_dose: 2}).toArray()
+            .then(results => {
+              res.json(results);
+            })
+            .catch(error => console.error(error))
+        });
     })
     .catch(console.error)
 

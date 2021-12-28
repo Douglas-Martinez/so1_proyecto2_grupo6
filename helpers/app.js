@@ -14,16 +14,34 @@ function getRandomAge() {
 }
 
 function getRandomNDose() {
-    return Math.floor(Math.random() * 3) + 1;
+    return Math.floor(Math.random() * 3);
 }
 
 function getRandomVaccine() {
     return Math.floor(Math.random() * 6);
 }
 
+let jsonData = [];
+const nombres = pokemones.results;
+
+for (let x = 0; x < 7; x ++) {
+    for(let i = 0; i < nombres.length; i++) {
+        let objeto = {
+            name: nombres[i].name,
+            location: departamentos[getRandomDept()],
+            age: getRandomAge(),
+            vaccine_type: vacunas[getRandomVaccine()],
+            n_dose: getRandomNDose()
+        }
+    
+        jsonData.push(objeto)
+    }
+}
+
+console.log(JSON.stringify(jsonData));
 
 
-MongoClient.connect(connString, {
+/*MongoClient.connect(connString, {
     useUnifiedTopology: true
 })
     .then(client => {
@@ -31,7 +49,7 @@ MongoClient.connect(connString, {
         const db = client.db('sopes1-data');
         const dataCollection = db.collection('registros');
         const nombres = pokemones.results;
-        for(let i = 1; i < nombres.length; i++) {
+        for(let i = 0; i < nombres.length; i++) {
             let objeto = {
                 name: nombres[i].name,
                 location: departamentos[getRandomDept()],
@@ -48,7 +66,7 @@ MongoClient.connect(connString, {
         }
     })
     .catch(console.error)
-
+*/
 
 
 
