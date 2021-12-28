@@ -14,11 +14,11 @@ import (
 )
 
 type Register struct {
-	Name 			string 	`json:Name`
-	Location 		string 	`json:Location`
-	Age 			int		`json:Age`
-	Vaccine_type 	string	`json:Vaccine_type`
-	N_dose 			int		`json:N_dose`
+	Name 			string 	`json:name`
+	Location 		string 	`json:location`
+	Age 			int		`json:age`
+	Vaccine_type 	string	`json:vaccine_type`
+	N_dose 			int		`json:n_dose`
 }
 
 var ctx = context.Background()
@@ -42,7 +42,8 @@ func main() {
 	fmt.Println("Suscrito al canal de Redis")
 
 	//Conexion Mongo
-	cOptions := options.Client().ApplyURI(fmt.Sprintf("mongodb://"+os.Getenv("MONGO_ADDRESS")+":27017"))
+	//cOptions := options.Client().ApplyURI(fmt.Sprintf("mongodb://"+os.Getenv("MONGO_ADDRESS")+":27017"))
+	cOptions := options.Client().ApplyURI(fmt.Sprintf("mongodb+srv://runi:runi2K22!r@cluster0.ui0ei.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"))
 	mongoClient, err := mongo.Connect(ctx, cOptions)
 	if err != nil {
 		fmt.Println("Error creando cliente de Mongo")
@@ -54,10 +55,10 @@ func main() {
 		log.Fatal(err)
 	}
 	fmt.Println("Conectado a MongoDB")
-	myMongoDB := mongoClient.Database("proyecto2")
-	collection := myMongoDB.Collection("Registros")
-	collection.Drop(context.TODO())
-	collection = myMongoDB.Collection("Registros")
+	myMongoDB := mongoClient.Database("sopes1-data")
+	collection := myMongoDB.Collection("registros")
+	//collection.Drop(context.TODO())
+	//collection = myMongoDB.Collection("registros")
 
 	
 	for {
