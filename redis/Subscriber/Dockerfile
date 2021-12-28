@@ -1,4 +1,4 @@
-FROM golang
+FROM golang:alpine
 WORKDIR /go/src/app
 COPY *.go .
 RUN go mod init

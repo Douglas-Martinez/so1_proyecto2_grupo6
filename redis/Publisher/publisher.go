@@ -53,28 +53,18 @@ func enableCORS(router *mux.Router) {
 
 func keyEdad(age int) string {
 
-	if age >= 1 && age <= 10 {
-		return "edad1_10"
-	} else if age >= 11 && age <= 20 {
-		return "edad11_20"
-	} else if age >= 21 && age <= 30 {
-		return "edad21_30"
-	} else if age >= 31 && age <= 40 {
-		return "edad31_40"
-	} else if age >= 41 && age <= 50 {
-		return "edad41_50"
-	} else if age >= 51 && age <= 60 {
-		return "edad51_60"
-	} else if age >= 61 && age <= 70 {
-		return "edad61_70"
-	} else if age >= 71 && age <= 80 {
-		return "edad71_80"
-	} else if age >= 81 && age <= 90 {
-		return "edad81_90"
-	} else if age >= 91 && age <= 100 {
-		return "edad91_100"
+	if age >= 0 && age <= 11 {
+		return "ninos"
+	} else if age >= 12 && age <= 18 {
+		return "adolescentes"
+	} else if age >= 19 && age <= 26 {
+		return "jovenes"
+	} else if age >= 27 && age <= 59 {
+		return "adultos"
+	} else if age >= 60 {
+		return "vejez"
 	} else {
-		return "edad91_100"
+		return "vejez"
 	}
 }
 
@@ -118,16 +108,11 @@ func publisherHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func cleanData() {
-	rdb.Set(ctx, "edad1_10", 0, 0)
-	rdb.Set(ctx, "edad11_20", 0, 0)
-	rdb.Set(ctx, "edad21_30", 0, 0)
-	rdb.Set(ctx, "edad31_40", 0, 0)
-	rdb.Set(ctx, "edad41_50", 0, 0)
-	rdb.Set(ctx, "edad51_60", 0, 0)
-	rdb.Set(ctx, "edad61_70", 0, 0)
-	rdb.Set(ctx, "edad71_80", 0, 0)
-	rdb.Set(ctx, "edad81_90", 0, 0)
-	rdb.Set(ctx, "edad91_100", 0, 0)
+	rdb.Set(ctx, "ninos", 0, 0)
+	rdb.Set(ctx, "adolescentes", 0, 0)
+	rdb.Set(ctx, "jovenes", 0, 0)
+	rdb.Set(ctx, "adultos", 0, 0)
+	rdb.Set(ctx, "vejez", 0, 0)
 
 	rdb.Del(ctx, "lNombres")
 }
@@ -149,7 +134,7 @@ func main() {
 
 	PORT, ok := os.LookupEnv("PORT")
 	if !ok {
-		PORT = "3050"
+		PORT = "3500"
 	}
 
 	fmt.Println("Servidor pub en puerto", PORT)
