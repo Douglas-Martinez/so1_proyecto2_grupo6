@@ -7,7 +7,7 @@ import (
 	"os"
 	"encoding/json"
 
-	//"github.com/joho/godotenv"
+	"github.com/joho/godotenv"
 	"github.com/go-redis/redis/v8"
 	"go.mongodb.org/mongo-driver/mongo"
     "go.mongodb.org/mongo-driver/mongo/options"
@@ -25,30 +25,31 @@ var ctx = context.Background()
 
 func main() {
 	// Carga de archivo .env
-	/*
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
-	*/
 	
 	// Conexion Redis
-	rdb := redis.NewClient(&redis.Options {
-		Addr: os.Getenv("REDIS_ADDRESS") + ":6379",
-		DB: 0,
-	})
+	opt, err := redis.ParseURL(os.Getenv("REDIS_ADDRESS"))
+	if err != nil {
+		fmt.Println("Error con URL de redis")
+		log.Fatal(err)
+	}
+	rdb := redis.NewClient(opt)
+	fmt.Println("Conectado a Redis")
 	
 	sub := rdb.Subscribe(ctx, "Registros")
 	fmt.Println("Suscrito al canal de Redis")
 
 	//Conexion Mongo
-	//cOptions := options.Client().ApplyURI(fmt.Sprintf("mongodb://"+os.Getenv("MONGO_ADDRESS")+":27017"))
-	cOptions := options.Client().ApplyURI(fmt.Sprintf("mongodb+srv://runi:runi2K22!r@cluster0.ui0ei.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"))
-	mongoClient, err := mongo.Connect(ctx, cOptions)
+	cOptions := options.Client().ApplyURI(os.Getenv("MONGO_ADDRESS"))
+	mongoClient, err := mongo.Connect(context.TODO(), cOptions)
 	if err != nil {
 		fmt.Println("Error creando cliente de Mongo")
-		log.Fatal(err)
+		log.Println(err)
 	}
+
 	err = mongoClient.Ping(ctx, nil)
 	if err != nil {
 		fmt.Println("Error conectando al servidor")
@@ -59,7 +60,6 @@ func main() {
 	collection := myMongoDB.Collection("registros")
 	//collection.Drop(context.TODO())
 	//collection = myMongoDB.Collection("registros")
-
 	
 	for {
 		// Subscriber de Redis
