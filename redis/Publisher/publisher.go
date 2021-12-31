@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
-	"os"
+	//"os"
 	"context"
 
 	"net/http"
@@ -78,7 +78,9 @@ func publisherHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if nuevo.Age != 0 && nuevo.Name != "" {
-		opt, err := redis.ParseURL(os.Getenv("REDIS_ADDRESS"))
+		//opt, err := redis.ParseURL(os.Getenv("REDIS_ADDRESS"))
+		opt, err := redis.ParseURL("redis://default:redisg6so1py2@34.136.166.39:6379")
+		//opt, err := redis.ParseURL("redis://172.17.0.3:6379")
 		if err != nil {
 			fmt.Println("Error con URL de redis en handler")
 			log.Fatal(err)
@@ -108,23 +110,6 @@ func publisherHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func cleanData() {
-	opt, err := redis.ParseURL(os.Getenv("REDIS_ADDRESS"))
-	if err != nil {
-		fmt.Println("Error con URL de redis en cleanData()")
-		log.Fatal(err)
-	}
-	rdb := redis.NewClient(opt)
-
-	rdb.Set(ctx, "ninos", 0, 0)
-	rdb.Set(ctx, "adolescentes", 0, 0)
-	rdb.Set(ctx, "jovenes", 0, 0)
-	rdb.Set(ctx, "adultos", 0, 0)
-	rdb.Set(ctx, "vejez", 0, 0)
-
-	rdb.Del(ctx, "lNombres")
-}
-
 func main() {
 	/*
 	err := godotenv.Load()
@@ -133,12 +118,10 @@ func main() {
 	}
 	*/
 
-	cleanData()
-
 	router := mux.NewRouter().StrictSlash(true)
 	enableCORS(router)
 	
-	router.HandleFunc("/registerPub", publisherHandler).Methods("POST")
+	router.HandleFunc("/entrada", publisherHandler).Methods("POST")
 
 	fmt.Println("Servidor pub en puerto 3050")
 	if err := http.ListenAndServe(":3050", router); err != nil {
