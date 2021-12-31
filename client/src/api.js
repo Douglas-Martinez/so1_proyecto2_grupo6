@@ -16,9 +16,39 @@ const getTwoDose = () => {
     return http.get('/two_dose');
 }
 
+const getNinos = () => {
+    return http.get('/ninos');
+}
+
+const getAdolescentes = () => {
+    return http.get('/adolescentes');
+}
+
+const getJovenes = () => {
+    return http.get('/jovenes');
+}
+
+const getAdultos = () => {
+    return http.get('/adultos');
+}
+
+const getVejez = () => {
+    return http.get('/vejez');
+}
+
+const getNombres = () => {
+    return http.get('/nombres');
+}
+
 export default {
     getRam,
     getAllData,
     getOneDose,
-    getTwoDose
+    getTwoDose,
+    getNinos,
+    getAdolescentes,
+    getJovenes,
+    getAdultos,
+    getVejez,
+    getNombres
 }

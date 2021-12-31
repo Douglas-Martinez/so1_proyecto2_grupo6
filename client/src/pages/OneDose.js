@@ -81,7 +81,7 @@ export class OneDose extends Component {
     });
     //console.log(arrFinal);
     arrFinal.forEach(element => {
-      element.y = (element.y * 100) / total;
+      element.y = (element.y * 100) / data.length;
       element.x = element.x + ": " + element.y.toFixed(2) + "%";
     });
 
@@ -109,7 +109,7 @@ export class OneDose extends Component {
     });
     //console.log(arrFinal);
     arrFinal.forEach(element => {
-      element.y = (element.y * 100) / total;
+      element.y = (element.y * 100) / data.length;
       element.x = element.x + ": " + element.y.toFixed(2) + "%";
     });
 
@@ -142,7 +142,7 @@ export class OneDose extends Component {
     ]
 
     edades.forEach(element => {
-      element.y = (element.y * 100) / total;
+      element.y = (element.y * 100) / data.length;
       element.x = element.x + ": " + element.y.toFixed(2) + "%";
     });
 
@@ -223,7 +223,7 @@ export class OneDose extends Component {
     }
     return (
       <div className="container">
-        <h1>Estadisticas con usuarios de una dosis</h1>
+        <h1>Estadisticas con persona de una dosis</h1>
         <hr />
         <div
           className="btn-group"

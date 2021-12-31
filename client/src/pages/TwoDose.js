@@ -4,7 +4,7 @@ import PageLoading from "../components/PageLoading";
 
 import api from "../api";
 
-export class OneDose extends Component {
+export class TwoDose extends Component {
   constructor(props) {
     super(props);
 
@@ -81,7 +81,7 @@ export class OneDose extends Component {
     });
     //console.log(arrFinal);
     arrFinal.forEach(element => {
-      element.y = (element.y * 100) / total;
+      element.y = (element.y * 100) / data.length;
       element.x = element.x + ": " + element.y.toFixed(2) + "%";
     });
 
@@ -109,7 +109,7 @@ export class OneDose extends Component {
     });
     //console.log(arrFinal);
     arrFinal.forEach(element => {
-      element.y = (element.y * 100) / total;
+      element.y = (element.y * 100) / data.length;
       element.x = element.x + ": " + element.y.toFixed(2) + "%";
     });
 
@@ -142,7 +142,7 @@ export class OneDose extends Component {
     ]
 
     edades.forEach(element => {
-      element.y = (element.y * 100) / total;
+      element.y = (element.y * 100) / data.length;
       element.x = element.x + ": " + element.y.toFixed(2) + "%";
     });
 
@@ -223,7 +223,7 @@ export class OneDose extends Component {
     }
     return (
       <div className="container">
-        <h1>Estadisticas con usuarios de dosis completa</h1>
+        <h1>Estadisticas con personas de dosis completa</h1>
         <hr />
         <div
           className="btn-group"
@@ -285,4 +285,4 @@ export class OneDose extends Component {
   }
 }
 
-export default OneDose;
+export default TwoDose;
