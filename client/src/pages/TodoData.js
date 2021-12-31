@@ -45,7 +45,7 @@ export class OneDose extends Component {
     }
     return (
       <div className="container">
-        <h1>Estadisticas con usuarios de una dosis</h1>
+        <h1>Estadisticas de personas vacunadas</h1>
         <hr />
         <table className="table">
           <thead>
@@ -66,8 +66,8 @@ export class OneDose extends Component {
                         <td>{item.name}</td>
                         <td>{item.age}</td>
                         <td>{item.location}</td>
-                        <td>{item.vaccine_type}</td>
-                        <td>{item.n_dose}</td>
+                        <td>{item.vaccine_type || item.vaccinetype}</td>
+                        <td>{item.n_dose || item.dosis || 0}</td>
                     </tr>)
                 })
             }
