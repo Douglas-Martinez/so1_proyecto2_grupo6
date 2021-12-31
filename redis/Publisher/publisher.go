@@ -18,11 +18,6 @@ import (
 
 var ctx = context.Background()
 
-var rdb = redis.NewClient(&redis.Options {
-	Addr: os.Getenv("REDIS_ADDRESS") + ":6379",
-	DB: 0,
-})
-
 type Register struct {
 	Name 			string 	`json:name`
 	Location 		string 	`json:location`
@@ -83,13 +78,19 @@ func publisherHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if nuevo.Age != 0 && nuevo.Name != "" {
+		opt, err := redis.ParseURL(os.Getenv("REDIS_ADDRESS"))
+		if err != nil {
+			fmt.Println("Error con URL de redis en handler")
+			log.Fatal(err)
+		}
+		rdb := redis.NewClient(opt)
+
 		// Contador de edades
-		_, err := rdb.Incr(ctx, keyEdad(nuevo.Age)).Result()
+		_, err = rdb.Incr(ctx, keyEdad(nuevo.Age)).Result()
 		if err != nil {
 			fmt.Println("Error con Incr")
 			log.Fatal(err)
 		}
-		//fmt.Println(keyEdad(nuevo.Age))
 
 		// Agregar Nombre a la lista
 		_, err = rdb.LPush(ctx, "lNombres", nuevo.Name).Result()
@@ -108,6 +109,13 @@ func publisherHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func cleanData() {
+	opt, err := redis.ParseURL(os.Getenv("REDIS_ADDRESS"))
+	if err != nil {
+		fmt.Println("Error con URL de redis en cleanData()")
+		log.Fatal(err)
+	}
+	rdb := redis.NewClient(opt)
+
 	rdb.Set(ctx, "ninos", 0, 0)
 	rdb.Set(ctx, "adolescentes", 0, 0)
 	rdb.Set(ctx, "jovenes", 0, 0)
@@ -132,13 +140,8 @@ func main() {
 	
 	router.HandleFunc("/registerPub", publisherHandler).Methods("POST")
 
-	PORT, ok := os.LookupEnv("PORT")
-	if !ok {
-		PORT = "3500"
-	}
-
-	fmt.Println("Servidor pub en puerto", PORT)
-	if err := http.ListenAndServe(":"+PORT, router); err != nil {
+	fmt.Println("Servidor pub en puerto 3050")
+	if err := http.ListenAndServe(":3050", router); err != nil {
 		log.Fatal(err)
 		return
 	}
