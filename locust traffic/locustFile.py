@@ -75,7 +75,7 @@ class MessageTraffic(HttpUser):
             printDebug (data_to_send)
 
             
-            self.client.post("/casoNuevo", json=random_data)
+            self.client.post("/entrada", json=random_data)
 
         
         else:
