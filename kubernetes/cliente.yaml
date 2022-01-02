@@ -16,6 +16,6 @@ spec:
         app: cliente
     spec:
       containers:
-      - image: rickg96/so1-client
+      - image: douglasmartinez97/so1-client
         imagePullPolicy: Always
         name: cliente
