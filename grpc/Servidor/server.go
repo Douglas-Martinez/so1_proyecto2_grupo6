@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"log"
 	"net"
-	"os"
+	//"os"
 
 	"github.com/go-redis/redis/v8"
 	//"github.com/joho/godotenv"
@@ -77,7 +77,7 @@ func (s *server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloRe
 		log.Println("Error loading .env file")
 	}*/
 	//fmt.Println(os.Getenv("MONGO_ADDRESS"))
-	clienteMongo := options.Client().ApplyURI(os.Getenv("MONGO_ADDRESS"))
+	clienteMongo := options.Client().ApplyURI("mongodb://adming6:mongog6so1py2@34.136.166.39:27017")
 	cliente, err := mongo.Connect(context.TODO(), clienteMongo)
 	if err != nil {
 		log.Println(err)
@@ -102,7 +102,7 @@ func (s *server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloRe
 	})*/
 
 	if info.Age != 0 && info.Name != "" {
-		opt, err := redis.ParseURL(os.Getenv("REDIS_ADDRESS"))
+		opt, err := redis.ParseURL("redis://default:redisg6so1py2@34.136.166.39:6379")
 		if err != nil {
 			fmt.Println("Error con URL de redis en handler")
 			log.Println(err)

@@ -28,7 +28,7 @@ type caso struct {
 }
 
 const (
-	address     = "172.17.0.4:50051"
+	address     = "servidorgrcp:50051"
 	defaultName = "world"
 )
 
@@ -98,8 +98,8 @@ func Inicio(w http.ResponseWriter, r *http.Request) {
 //Función principal
 func main() {
 	router := mux.NewRouter().StrictSlash(true)
-	router.HandleFunc("/casoNuevo", CasoNuevo).Methods("POST")
+	router.HandleFunc("/entrada", CasoNuevo).Methods("POST")
 	router.HandleFunc("/inicio", Inicio).Methods("GET")
 	log.Println("Si inicio el server")
-	log.Fatal(http.ListenAndServe(":3000", handlers.CORS(handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"}), handlers.AllowedMethods([]string{"GET", "POST", "PUT", "HEAD", "OPTIONS"}), handlers.AllowedOrigins([]string{"*"}))(router)))
+	log.Fatal(http.ListenAndServe(":3050", handlers.CORS(handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"}), handlers.AllowedMethods([]string{"GET", "POST", "PUT", "HEAD", "OPTIONS"}), handlers.AllowedOrigins([]string{"*"}))(router)))
 }
