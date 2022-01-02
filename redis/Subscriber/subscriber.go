@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"context"
 	"log"
-	"os"
+	//"os"
 	"encoding/json"
 
 	//"github.com/joho/godotenv"
@@ -33,7 +33,9 @@ func main() {
 	*/
 	
 	// Conexion Redis
-	opt, err := redis.ParseURL(os.Getenv("REDIS_ADDRESS"))
+	//opt, err := redis.ParseURL(os.Getenv("REDIS_ADDRESS"))
+	opt, err := redis.ParseURL("redis://default:redisg6so1py2@34.136.166.39:6379")
+	//opt, err := redis.ParseURL("redis://172.17.0.3:6379")
 	if err != nil {
 		fmt.Println("Error con URL de redis")
 		log.Fatal(err)
@@ -45,7 +47,9 @@ func main() {
 	fmt.Println("Suscrito al canal de Redis")
 
 	//Conexion Mongo
-	cOptions := options.Client().ApplyURI(os.Getenv("MONGO_ADDRESS"))
+	//cOptions := options.Client().ApplyURI(os.Getenv("MONGO_ADDRESS"))
+	cOptions := options.Client().ApplyURI("mongodb://adming6:mongog6so1py2@34.136.166.39:27017")
+	//cOptions := options.Client().ApplyURI("mongodb://172.17.0.2:27017")
 	mongoClient, err := mongo.Connect(context.TODO(), cOptions)
 	if err != nil {
 		fmt.Println("Error creando cliente de Mongo")
@@ -60,8 +64,6 @@ func main() {
 	fmt.Println("Conectado a MongoDB")
 	myMongoDB := mongoClient.Database("sopes1-data")
 	collection := myMongoDB.Collection("registros")
-	//collection.Drop(context.TODO())
-	//collection = myMongoDB.Collection("registros")
 	
 	for {
 		// Subscriber de Redis

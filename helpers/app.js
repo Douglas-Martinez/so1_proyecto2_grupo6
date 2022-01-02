@@ -3,7 +3,7 @@ import pokemones from "./pkmn.mjs";
 import vacunas from "./vac.mjs";
 import departamentos from "./dptms.mjs";
 
-const connString = 'mongodb+srv://runi:runi2K22!r@cluster0.ui0ei.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
+const connString = 'mongodb://adming6:mongog6so1py2@34.121.255.243:27017';
 
 function getRandomDept() {
     return Math.floor(Math.random() * 22);
@@ -24,7 +24,7 @@ function getRandomVaccine() {
 let jsonData = [];
 const nombres = pokemones.results;
 
-for (let x = 0; x < 7; x ++) {
+/*for (let x = 0; x < 7; x ++) {
     for(let i = 0; i < nombres.length; i++) {
         let objeto = {
             name: nombres[i].name,
@@ -39,9 +39,9 @@ for (let x = 0; x < 7; x ++) {
 }
 
 console.log(JSON.stringify(jsonData));
+*/
 
-
-/*MongoClient.connect(connString, {
+MongoClient.connect(connString, {
     useUnifiedTopology: true
 })
     .then(client => {
@@ -66,7 +66,6 @@ console.log(JSON.stringify(jsonData));
         }
     })
     .catch(console.error)
-*/
 
 
 

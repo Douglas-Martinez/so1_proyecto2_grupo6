@@ -1,0 +1,47 @@
+# Creacion de Cluster
+gcloud container clusters create g6-so1 --num-nodes=1 --tags=allin,allout --enable-legacy-authorization --issue-client-certificate --preemptible --machine-type=e2-medium --enable-autoscaling --min-nodes=1 --max-nodes=3
+
+kubectl get pods -n project
+kubectl get all -n nginx-ingress
+kubectl get namespace projects
+
+# Path para linkerd
+export PATH=$PATH:$HOME/.linkerd2/bin
+
+# Instalar Nginx-Ingress
+helm repo add stable https://charts.helm.sh/stable
+kubectl create namespace nginx-ingress
+helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+helm repo update
+helm install nginx-ingress ingress-nginx/ingress-nginx -n nginx-ingress
+kubectl get all -n nginx-ingress
+
+# Inyectar linkerd en Ingress
+kubectl -n nginx-ingress get deployment nginx-ingress-ingress-nginx-controller -o yaml | linkerd inject --ingress --skip-inbound-ports 443 --skip-outbound-ports 443 - | kubectl apply -f -
+kubectl describe pods nginx-ingress-ingress-nginx-controller-64665dd6bc-dgkj4 -n nginx-ingress | grep "linkerd.io/inject: ingress"
+
+# Crear deploys y servicios
+kubectl create -f namespace.yaml
+kubectl create -f redis.yaml
+kubectl create -f grpc.yaml
+kubectl create -f dummy.yaml
+kubectl create -f splitter.yaml
+
+# Inyectar Linkerd a deployments
+kubectl -n minamespace get deploy -o yaml | linkerd inject - | kubectl apply -f -
+
+# Dashboard de linkerd
+linkerd viz dashboard
+
+----------------------------------------------------------------
+
+# Prometheus y Grafana
+cd ~/prometheus/prometheus-2.32.1
+./prometheus
+
+cd ~/prometheus/node_exporter-1.3.1
+./node_exporter
+# nano prometheus.yaml
+
+cd ~/grafana/grafana-8.3.3/bin
+./grafana-server
