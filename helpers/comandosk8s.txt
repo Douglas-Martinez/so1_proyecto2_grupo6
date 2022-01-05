@@ -1,5 +1,5 @@
 # Creacion de Cluster
-gcloud container clusters create g6-so1 --num-nodes=1 --tags=allin,allout --enable-legacy-authorization --issue-client-certificate --preemptible --machine-type=e2-medium --enable-autoscaling --min-nodes=1 --max-nodes=3
+gcloud container clusters create g6-v2 --num-nodes=1 --tags=allin,allout --enable-legacy-authorization --issue-client-certificate --preemptible --machine-type=e2-medium --enable-autoscaling --min-nodes=1 --max-nodes=3
 
 kubectl get pods -n project
 kubectl get all -n nginx-ingress
@@ -28,7 +28,7 @@ kubectl create -f dummy.yaml
 kubectl create -f splitter.yaml
 
 # Inyectar Linkerd a deployments
-kubectl -n minamespace get deploy -o yaml | linkerd inject - | kubectl apply -f -
+kubectl -n project get deploy -o yaml | linkerd inject - | kubectl apply -f -
 
 # Dashboard de linkerd
 linkerd viz dashboard

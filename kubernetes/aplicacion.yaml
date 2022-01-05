@@ -33,6 +33,7 @@ metadata:
   name: servidor
   namespace: aplicacion
 spec:
+  type: NodePort
   ports:
   - port: 10000
     protocol: TCP
